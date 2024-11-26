@@ -1,5 +1,24 @@
 
+import React, { useEffect, useState } from "react";
+import AppURL from "../../../api/AppURL";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
 const CategoryMenu = () => {
+
+    const [menuData, setMenuData] = useState([]);
+
+    useEffect(() => {
+        axios
+        .get(AppURL.AllCategoryDetails)
+        .then((response) => {
+            //console.log(response.data);
+            setMenuData(response.data);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, []);
 
   return (
     <div className="col-lg-3 d-none d-lg-block">
@@ -9,23 +28,24 @@ const CategoryMenu = () => {
         </a>
         <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical" style={{width: 'calc(100% - 30px)', zIndex: 1}}>
             <div className="navbar-nav w-100 overflow-hidden" style={{height: '410px'}}>
-                <div className="nav-item dropdown">
-                    <a href="#" className="nav-link" data-toggle="dropdown">Dresses <i className="fa fa-angle-down float-right mt-1"></i></a>
-                    <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                        <a href="" className="dropdown-item">Mens Dresses</a>
-                        <a href="" className="dropdown-item">Womens Dresses</a>
-                        <a href="" className="dropdown-item">Babys Dresses</a>
+                {Object.keys(menuData).map((key, i) => (
+                    <div className="nav-item dropdown" key={i}>
+                    <Link href="#" className="nav-link" data-toggle="dropdown">
+                        {menuData[key].category_name} <i className="fa fa-angle-down float-right mt-1" />
+                    </Link>
+                    {menuData[key].subcategory ? (
+                        <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
+                        {Object.keys(menuData[key].subcategory).map((sub, j) => (
+                            <Link className="dropdown-item" key={j} to={`/shop/${sub}`}>
+                            {menuData[key].subcategory[sub].category_name}
+                            </Link>
+                        ))}
+                        </div>
+                    ) : (
+                        ""
+                    )}
                     </div>
-                </div>
-                <a href="" className="nav-item nav-link">Shirts</a>
-                <a href="" className="nav-item nav-link">Jeans</a>
-                <a href="" className="nav-item nav-link">Swimwear</a>
-                <a href="" className="nav-item nav-link">Sleepwear</a>
-                <a href="" className="nav-item nav-link">Sportswear</a>
-                <a href="" className="nav-item nav-link">Jumpsuits</a>
-                <a href="" className="nav-item nav-link">Blazers</a>
-                <a href="" className="nav-item nav-link">Jackets</a>
-                <a href="" className="nav-item nav-link">Shoes</a>
+                ))}
             </div>
         </nav>
     </div>
