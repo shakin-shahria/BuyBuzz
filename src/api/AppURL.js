@@ -4,6 +4,7 @@ const AppURL = {
 
     // All Category Details
     AllCategoryDetails: "http://127.0.0.1:8000/api/getCategories",
+    ProductSearch: "http://127.0.0.1:8000/api/products/search",
     getAllFeaturedCategory: "http://127.0.0.1:8000/api/getAllFeaturedCategory",
 
     categoryImagePath: "http://127.0.0.1:8000/uploads/category/original/",

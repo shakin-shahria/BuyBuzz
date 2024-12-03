@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AppURL from "../../../api/AppURL";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -26,7 +25,7 @@ const CategoryMenu = () => {
             <h6 className="m-0">Categories</h6>
             <i className="fa fa-angle-down text-dark"></i>
         </a>
-        <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical" style={{width: 'calc(100% - 30px)', zIndex: 1}}>
+        <nav className="position-absolute collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical" style={{width: 'calc(100% - 30px)', zIndex: 1}}>
             <div className="navbar-nav w-100 overflow-hidden" style={{height: '410px'}}>
                 {Object.keys(menuData).map((key, i) => (
                     <div className="nav-item dropdown" key={i}>

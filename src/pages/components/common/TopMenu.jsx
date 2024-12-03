@@ -2,6 +2,7 @@
 
 const TopMenu = () => {
     return (
+        <div className="col-lg-9">
         <nav className="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
             <a href className="text-decoration-none d-block d-lg-none">
             <h1 className="m-0 display-5 font-weight-semi-bold"><span className="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
@@ -29,6 +30,7 @@ const TopMenu = () => {
             </div>
             </div>
         </nav>
+        </div>
     );
 };
 

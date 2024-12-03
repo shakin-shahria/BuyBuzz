@@ -3,12 +3,12 @@ import CategoryMenu from "./components/common/CategoryMenu";
 import PageHeader from "./components/common/PageHeader";
 import Topmenu from "./components/common/Topmenu";
 import Footer from "./components/common/Footer";
-import Products from './components/common/Products';
+import ProductItems from "./ProductItems";
 import { useParams } from "react-router-dom";
 
-const ShopByCategory = () => {
-    let { categoryid } = useParams();
-
+const ProductDetails = () => {
+    let { productid } = useParams();
+    console.log(productid);
     return (
         <>
             <TopHeader />
@@ -19,10 +19,10 @@ const ShopByCategory = () => {
 				</div>
 			</div>
 			<PageHeader />
-			<Products categoryId={categoryid} />
+			<ProductItems productId={productid}  />
 			<Footer />
         </>
     );
 };
 
-export default ShopByCategory;
+export default ProductDetails;

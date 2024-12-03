@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AppURL from "../../../api/AppURL";
 import axios from "axios";
 import { Link } from "react-router-dom";

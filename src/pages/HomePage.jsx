@@ -1,4 +1,4 @@
-import TopNavigation from "./components/common/TopNavigation";
+import TopHeader from "./components/common/TopHeader";
 import Navigation from "./components/homepage/Navigation";
 import Footer from "./components/common/Footer";
 import FeaturedCategory from "./components/homepage/FeaturedCategory";
@@ -6,7 +6,7 @@ import FeaturedCategory from "./components/homepage/FeaturedCategory";
 const HomePage = () => {
     return (
         <>
-            <TopNavigation />
+            <TopHeader />
             <Navigation />
             <FeaturedCategory />
             <Footer />
