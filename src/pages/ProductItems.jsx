@@ -14,53 +14,45 @@ const ProductItems = ({ productId }) => {
 
     const [activeTab, setActiveTab] = useState(1); // State to manage the active tab
 
+    const [sizeData, setSizeData] = useState([]);
+    const [colorData, setColorData] = useState([]);
+
+    const [selectedSize, setSelectedSize] = useState('');
+    const [selectedColor, setSelectedColor] = useState('');
+
     const handleTabClick = (tabNumber) => {
         setActiveTab(tabNumber);
     };
 
+    const handleSizeChange = (event) => {
+        setSelectedSize(event.target.value);
+    };
+    
+    const handleColorChange = (event) => {
+        setSelectedColor(event.target.value);
+    };
+
     useEffect(() => {
-      axios
-          .get(AppURL.getProductsById(productId))
-          .then((response) => {
-              console.log(response.data);
-              
-              // Assuming response.data contains product_details
-              const productDetails = response.data.product_details;
-              setProductDetails(productDetails); // Save the entire object
-  
-              // Access nested objects for specific values
-              const featureImage = productDetails.product_images?.feature_image;
-              setFeatureImage(featureImage);
-  
-              const imageArrayJSON = productDetails.product_images?.gallery_images;
-              setGalleryImages(JSON.parse(imageArrayJSON));
-  
-              // Optionally, extract additional details if needed
-              console.log(productDetails.product_title); // Example
-          })
-          .catch((error) => {
-              console.error(error);
-          });
-  }, [productId]);
-  
-    // useEffect(() => {
-    //     axios
-    //     .get(AppURL.getProductsById(productId))
-    //     .then((response) => {
-    //         console.log(response.data);
-    //         setProductDetails(response.data);
+        axios
+        .get(AppURL.getProductsById(productId))
+        .then((response) => {
+            console.log(response.data);
+            setProductDetails(response.data.product_details);
 
-    //         const featuresImage = response.data.product_images && response.data.product_images.feature_image;
-		//     setFeatureImage(featuresImage);
+            const featuresImage = response.data.product_details.product_images && response.data.product_details.product_images.feature_image;
+		    setFeatureImage(featuresImage);
 
-    //         const imageArrayJSON  = response.data.product_images && response.data.product_images.gallery_images;
-		//     setGalleryImages(JSON.parse(imageArrayJSON));
+            const imageArrayJSON  = response.data.product_details.product_images && response.data.product_details.product_images.gallery_images;
+		    setGalleryImages(JSON.parse(imageArrayJSON));
 
-    //     })
-    //     .catch((error) => {
-    //         console.error(error);
-    //     });
-    // }, [productId]);
+            setSizeData(response.data.size_data);
+            setColorData(response.data.color_data);
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, [productId]);
 
     return (
         <div className="container-fluid pt-5">
@@ -105,51 +97,39 @@ const ProductItems = ({ productId }) => {
 		        <div className="d-flex mb-3">
 		          <p className="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
 		          <form>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="size-1" name="size" />
-		              <label className="custom-control-label" htmlFor="size-1">XS</label>
-		            </div>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="size-2" name="size" />
-		              <label className="custom-control-label" htmlFor="size-2">S</label>
-		            </div>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="size-3" name="size" />
-		              <label className="custom-control-label" htmlFor="size-3">M</label>
-		            </div>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="size-4" name="size" />
-		              <label className="custom-control-label" htmlFor="size-4">L</label>
-		            </div>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="size-5" name="size" />
-		              <label className="custom-control-label" htmlFor="size-5">XL</label>
-		            </div>
+                  {sizeData.map((size, index) => (
+                    <div className="custom-control custom-radio custom-control-inline" key={index}>
+                    <input
+                        type="radio"
+                        className="custom-control-input"
+                        id={`size-${index}`}
+                        name="size"
+                        value={size}
+                        checked={selectedSize === size}
+                        onChange={handleSizeChange}
+                    />
+                    <label className="custom-control-label" htmlFor={`size-${index}`}>{size}</label>
+                    </div>
+                ))}
 		          </form>
 		        </div>
 		        <div className="d-flex mb-4">
 		          <p className="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
 		          <form>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="color-1" name="color" />
-		              <label className="custom-control-label" htmlFor="color-1">Black</label>
-		            </div>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="color-2" name="color" />
-		              <label className="custom-control-label" htmlFor="color-2">White</label>
-		            </div>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="color-3" name="color" />
-		              <label className="custom-control-label" htmlFor="color-3">Red</label>
-		            </div>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="color-4" name="color" />
-		              <label className="custom-control-label" htmlFor="color-4">Blue</label>
-		            </div>
-		            <div className="custom-control custom-radio custom-control-inline">
-		              <input type="radio" className="custom-control-input" id="color-5" name="color" />
-		              <label className="custom-control-label" htmlFor="color-5">Green</label>
-		            </div>
+                  {colorData.map((color, index) => (
+                        <div className="custom-control custom-radio custom-control-inline" key={index}>
+                        <input
+                            type="radio"
+                            className="custom-control-input"
+                            id={`color-${index}`}
+                            name="color"
+                            value={color}
+                            checked={selectedColor === color}
+                            onChange={handleColorChange}
+                        />
+                        <label className="custom-control-label" htmlFor={`color-${index}`}>{color}</label>
+                        </div>
+                    ))}
 		          </form>
 		        </div>
 		        <div className="d-flex align-items-center mb-4 pt-2">
@@ -221,16 +201,7 @@ const ProductItems = ({ productId }) => {
           <div className={`tab-pane fade ${activeTab === 2 ? "show active" : ""}`}>
             <h4 className="mb-3">Additional Information</h4>
             <p>
-              Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea.
-              Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam
-              ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed
-              sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam.
-              Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum
-              accusam sadipscing, eos dolores sit no ut diam consetetur duo justo
-              est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor
-              accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt
-              tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea
-              invidunt.
+              Test
             </p>
             <div className="row">
               <div className="col-md-6">
