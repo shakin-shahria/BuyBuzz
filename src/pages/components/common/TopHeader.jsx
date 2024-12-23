@@ -1,7 +1,14 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import ProductSearch from './ProductSearch';
+import CartIcon from './cart-icon/cart-icon.component';
+import CartDropdown from './cart-dropdown/cart-dropdown.component';
+import { CartContext } from '../contexts/cart.context';
 
 const TopHeader = () => {
+
+    const {isCartOpen} = useContext(CartContext);
+
     return (
         <div className="container-fluid">
           <div className="row bg-secondary py-2 px-xl-5">
@@ -46,7 +53,8 @@ const TopHeader = () => {
                 <i className="fas fa-heart text-primary" />
                 <span className="badge">0</span>
               </a>
-  
+              <CartIcon />
+              { isCartOpen && <CartDropdown />}
             </div>
           </div>
         </div>
