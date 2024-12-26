@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import AppURL from "../api/AppURL";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { CartContext } from "./components/contexts/cart.context";
 
 const ProductItems = ({ productId }) => {
@@ -23,6 +22,8 @@ const ProductItems = ({ productId }) => {
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
 
+    const [quantity, setQuantity] = useState(1);
+
     const handleTabClick = (tabNumber) => {
         setActiveTab(tabNumber);
     };
@@ -35,13 +36,27 @@ const ProductItems = ({ productId }) => {
         setSelectedColor(event.target.value);
     };
 
-    const addProductToCart = () => addItemToCart(ProductDetails);
+    
+    const addProductToCart = () => {
+      const productWithQuantity = { ...ProductDetails, quantity };
+      addItemToCart(productWithQuantity);
+    }
+
+    const handleIncrement = () => {
+      setQuantity(quantity + 1);
+    }
+
+    const handleDecrement = () => {
+      if(quantity > 1){
+        setQuantity(quantity - 1);
+      }
+    }
 
     useEffect(() => {
         axios
         .get(AppURL.getProductsById(productId))
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             setProductDetails(response.data.product_details);
 
             const featuresImage = response.data.product_details.product_images && response.data.product_details.product_images.feature_image;
@@ -140,13 +155,13 @@ const ProductItems = ({ productId }) => {
 		        <div className="d-flex align-items-center mb-4 pt-2">
 		          <div className="input-group quantity mr-3" style={{width: '130px'}}>
 		            <div className="input-group-btn">
-		              <button className="btn btn-primary btn-minus">
+		              <button className="btn btn-primary btn-minus" onClick={handleDecrement}>
 		                <i className="fa fa-minus" />
 		              </button>
 		            </div>
-		            <input type="text" className="form-control bg-secondary text-center" defaultValue={1} />
+		            <input type="text" className="form-control bg-secondary text-center" value={quantity} readOnly />
 		            <div className="input-group-btn">
-		              <button className="btn btn-primary btn-plus">
+		              <button className="btn btn-primary btn-plus" onClick={handleIncrement}>
 		                <i className="fa fa-plus" />
 		              </button>
 		            </div>

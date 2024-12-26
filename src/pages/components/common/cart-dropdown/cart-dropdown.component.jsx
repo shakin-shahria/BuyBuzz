@@ -13,7 +13,7 @@ const CartDropdown = () => {
                 <CartItem key={item.id} cartItem={item} />
             ))}
             </div>
-            <Link className="btn btn-primary px-3" to={"/cartPage"}><i className="fa fa-shopping-cart mr-1" /> Checkout</Link>
+            <Link className="btn btn-primary px-3" to={"/cartPage"}><i className="fa fa-shopping-cart mr-1" /> Proceed to Cart</Link>
         </div>
     );
 };
