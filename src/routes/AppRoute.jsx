@@ -4,6 +4,7 @@ import ContactUs from "../pages/ContactUs";
 import ShopByCategory from "../pages/ShopByCategory";
 import ProductDetails from "../pages/ProductDetails";
 import CartPage from "../pages/CartPage";
+import CheckoutPage from "../pages/CheckoutPage";
 
 const AppRoute = () => {
     return (
@@ -12,6 +13,7 @@ const AppRoute = () => {
             <Route path="/shop/:categoryid" element={<ShopByCategory />} />
             <Route path="/productdetails/:productid" element={<ProductDetails />} />
             <Route path="/cartPage" element={<CartPage />} />
+            <Route path="/checkoutPage" element={<CheckoutPage />} />
             <Route path="/contact-us" element={<ContactUs />} />
         </Routes>
     )

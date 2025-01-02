@@ -38,39 +38,6 @@ const removeCartItem = (cartItems, cartItemToRemove) => {
   };
 
 
-///implement the function that's it to remore the item
-
-
-const clearItemFromCart = (cartItems, cartItemToRemove) => {
-    const updatedCartItems = [...cartItems]; 
-    const itemIndex = updatedCartItems.findIndex(
-      (cartItem) => cartItem.id === cartItemToRemove.id 
-    );
-  
-    if (itemIndex !== -1) {
-      updatedCartItems.splice(itemIndex, 1); 
-    }
-  
-    return updatedCartItems;
-  };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const CartContext = createContext({
     isCartOpen: false,
     setIsCartOpen: () => {},
@@ -112,19 +79,11 @@ export const CartProvider = ({children}) => {
         setCartItems(removeCartItem(cartItems, cartItemToRemove));
     };
 
-    const handleClearItem = (itemToRemove) => {
-        setCartItems(clearItemFromCart(cartItems, itemToRemove));
-      };
-
-   
-
     const value = {
         isCartOpen,
         setIsCartOpen,
         addItemToCart,
         removeItemToCart,
-        clearItemFromCart,
-        handleClearItem,
         cartItems,
         cartCount,
         cartTotal

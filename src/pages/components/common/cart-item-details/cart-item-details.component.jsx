@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import AppURL from "../../../../api/AppURL";
 
 const CartItemDetails = () => {
-    const { cartItems, addItemToCart, handleClearItem,removeItemToCart, cartTotal } = useContext(CartContext);
+    const { cartItems, addItemToCart, removeItemToCart, clearItemFromCart, cartTotal } = useContext(CartContext);
 
     console.log(cartItems);
 
@@ -43,7 +43,7 @@ const CartItemDetails = () => {
                         </div>
                     </td>
                     <td className="align-middle">${item.quantity * item.product_price}</td>
-                    <td className="align-middle"><button className="btn btn-sm btn-primary" onClick={() => handleClearItem(item)}><i className="fa fa-times" /></button></td>
+                    <td className="align-middle"><button className="btn btn-sm btn-primary" onClick={() => clearItemFromCart(item)}><i className="fa fa-times" /></button></td>
                 </tr>
                 )) }
             </tbody>
