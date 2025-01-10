@@ -5,6 +5,7 @@ import ShopByCategory from "../pages/ShopByCategory";
 import ProductDetails from "../pages/ProductDetails";
 import CartPage from "../pages/CartPage";
 import CheckoutPage from "../pages/CheckoutPage";
+import Thankyou from "../pages/Thankyou";
 
 const AppRoute = () => {
     return (
@@ -15,6 +16,7 @@ const AppRoute = () => {
             <Route path="/cartPage" element={<CartPage />} />
             <Route path="/checkoutPage" element={<CheckoutPage />} />
             <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/thankyou" element={<Thankyou />} />
         </Routes>
     )
 }

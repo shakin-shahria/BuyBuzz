@@ -1,32 +1,29 @@
-import AppURL from "../../../../api/AppURL";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { useEffect, useState, useContext } from "react";
 import { CartContext } from "../../contexts/cart.context";
-
+import AppURL from "../../../../api/AppURL";
+import PropTypes from 'prop-types';
 
 const CheckoutDetails = (props) => {
-
-    const { cartItems, cartTotal } = useContext(CartContext);
-    const [firstname, setFirstName] = useState("");
-    const [lastname, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [mobileNumber, setMobileNumber] = useState("");
-    const [address_1, setAddress1] = useState("");
-    const [address_2, setAddress2] = useState("");
-    const [country, setCountry] = useState("");
-    const [city, setCity] = useState("");
-    const [district, setDistrict] = useState("");
-    const [zipcode, setZipcode] = useState("");
-    const [create_account, setAccount] = useState("");
-
-  // Flag to handle submission
+  const { cartItems, cartTotal } = useContext(CartContext);
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [address_1, setAddress1] = useState("");
+  const [address_2, setAddress2] = useState("");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [create_account, setAccount] = useState("");
   const [submitFlag, setSubmitFlag] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("");  // To track selected payment method
 
-  // The handleSubmit method that gets triggered when the button is clicked
+  // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
 
-    // Check if all fields are populated before setting the submit flag
     if (
       firstname &&
       lastname &&
@@ -41,18 +38,21 @@ const CheckoutDetails = (props) => {
       cartItems.length > 0 &&
       cartTotal > 0
     ) {
-      setSubmitFlag(true);  // Set the flag to trigger the post request
+      // Get selected payment method
+      const selectedPaymentMethod = document.querySelector('input[name="payment"]:checked')?.id;
+      setPaymentMethod(selectedPaymentMethod); // Update state with selected method
+      setSubmitFlag(true);  // Trigger the API call
     } else {
       console.error('Please fill in all the required fields.');
     }
   };
 
-  // useEffect for handling the actual data submission when submitFlag is true
   useEffect(() => {
     if (submitFlag) {
       const submitOrderDetails = async () => {
         try {
-          const response = await axios.post(AppURL.submitOrderDetails, {
+          // Common order data
+          const orderData = {
             firstname,
             lastname,
             email,
@@ -65,31 +65,52 @@ const CheckoutDetails = (props) => {
             zipcode,
             create_account,
             cartItems,
-            cartTotal
-          });
+            cartTotal,
+          };
 
-          console.log(response.data);
+          // If SSLCommerz is selected, initiate payment gateway call
+          if (paymentMethod === "sslcommerce") {
+            // Call the SSLCommerz API to initiate payment
+            const response = await axios.post(AppURL.sslCommerzPayment, orderData);  // Assume this is the endpoint
+            const sslCommerzData = response.data;
+            const paymentLink = sslCommerzData.result.GatewayPageURL;
 
-          const responseData = response.data; 
+            if (paymentLink) {
+              // Redirect to the SSLCommerz payment page
+              console.log('SSLCOMMERCZ ACTIVATED');
+              window.location.href = paymentLink;
+            } else {
+              console.error('Failed to retrieve payment link.');
+            }
+          } 
+          // If Cash On Delivery (COD) is selected, submit the order
+          else if (paymentMethod === "banktransfer") {
+            const response = await axios.post(AppURL.submitOrderDetails, orderData);
+            //console.log(response.data);
 
-          if (props.history) {
-            props.history.push({
-              pathname: '/OrderSuccess',
-              state: { data: responseData },
-            });
+            const responseData = response.data; 
+
+            if (props.history) {
+              props.history.push({
+                pathname: '/OrderSuccess',
+                state: { data: responseData },
+              });
+            } else {
+              console.error('Props.history is undefined');
+            }
           } else {
-            console.error('Props.history is undefined');
-            // Handle the case when history is not available
+            console.error('No payment method selected');
           }
+          
         } catch (err) {
           console.error('Error submitting order details:', err);
         }
       };
 
       submitOrderDetails();
-      setSubmitFlag(false);  // Reset the flag after submission
+      setSubmitFlag(false);  // Reset the submit flag after submission
     }
-  }, [submitFlag]);  // This effect is triggered when the submitFlag changes
+  }, [submitFlag, paymentMethod]);
 
     return (
         <form>
@@ -193,8 +214,8 @@ const CheckoutDetails = (props) => {
               <div className="card-body">
                 <div className="form-group">
                   <div className="custom-control custom-radio">
-                    <input type="radio" className="custom-control-input" name="payment" id="paypal" />
-                    <label className="custom-control-label" htmlFor="paypal">SSLCommerz</label>
+                    <input type="radio" className="custom-control-input" name="payment" id="sslcommerce" />
+                    <label className="custom-control-label" htmlFor="sslcommerce">SSLCommerz</label>
                   </div>
                 </div>
                 <div className>
@@ -213,6 +234,10 @@ const CheckoutDetails = (props) => {
       </div>
       </form>
     );
+};
+
+CheckoutDetails.propTypes = {
+    history: PropTypes.object,  // History prop type validation
 };
 
 export default CheckoutDetails;
