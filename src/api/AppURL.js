@@ -23,8 +23,9 @@ const AppURL = {
 
 
 
-    GET_ALL_ORDERS: '/orders',
-    GET_ORDER_BY_ID: '/orders',  //  will append order ID to this in the frontend
+    GET_ALL_ORDERS:"http://127.0.0.1:8000/api/orders",
+    GET_ORDER_BY_ID: "http://127.0.0.1:8000/api/orders/{id}",  //  will append order ID to this in the frontend
+    GET_LATEST_ORDER:"http://127.0.0.1:8000/api/orders/latest",
 };
 
 export default AppURL;
